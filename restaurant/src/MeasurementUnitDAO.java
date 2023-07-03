@@ -22,7 +22,8 @@ public class MeasurementUnitDAO {
     protected void connect() throws SQLException {
         if (jdbcConnection == null || jdbcConnection.isClosed()) {
             try {
-                Class.forName("com.mysql.jdbc.Driver");
+                //Class.forName("com.mysql.jdbc.Driver");
+                Class.forName("com.mysql.cj.jdbc.Driver");
             } catch (ClassNotFoundException e) {
                 throw new SQLException(e);
             }
@@ -50,7 +51,7 @@ public class MeasurementUnitDAO {
         return rowInserted;
     }
 
-    public List<MeasurementUnit> listAllBooks() throws SQLException {
+    public List<MeasurementUnit> listAllUnits() throws SQLException {
         List<MeasurementUnit> listUnit = new ArrayList<>();
 
         String sql = "SELECT * FROM measurementUnits";
