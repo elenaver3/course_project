@@ -5,11 +5,6 @@ public class Main {
     public static void main(String[] args) throws SQLException {
 
 
-
-        /*
-
-
-
         /*
         String dbURL = "jdbc:mysql://std-mysql.ist.mospolytech.ru:3306/std_2277_restaurant";
         String dbName = "std_2277_restaurant";
@@ -20,13 +15,13 @@ public class Main {
 
         for (MeasurementUnit mUnit: list) {
             System.out.println(mUnit.getUnit());
-        }
+        } */
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             //"jdbc:mysql://std-mysql.ist.mospolytech.ru:3306/std_2277_restaurant"
-            Connection connection = DriverManager.getConnection("jdbc:mysql://phpmyadmin.fit.mospolytech.ru:3306/std_2277_restaurant",
+            Connection connection = DriverManager.getConnection("jdbc:mysql://std-mysql.ist.mospolytech.ru:3306/std_2277_restaurant",
                     "std_2277_restaurant", "restaurant2052");
 
             Statement statement = connection.createStatement();
@@ -49,7 +44,7 @@ public class Main {
         }
 
 
-    */
+
 
     }
 }

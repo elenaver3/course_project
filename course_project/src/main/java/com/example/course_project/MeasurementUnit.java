@@ -1,3 +1,5 @@
+package com.example.course_project;
+
 public class MeasurementUnit {
     private int id;
     private String unit;
