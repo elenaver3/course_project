@@ -19,4 +19,5 @@ public class Post extends HashMap<String, Object> {
     public Object getValue(String key) {
         return this.get(key);
     }
+
 }

@@ -20,8 +20,9 @@ public class ClientsModel {
 
         clients = new Posts();
 
-        if (resultSet.next()) {
+        while (resultSet.next()) {
             Post post = new Post();
+            post.addValue("id", resultSet.getInt("id"));
             post.addValue("last_name", resultSet.getString("last_name"));
             post.addValue("first_name", resultSet.getString("first_name"));
             post.addValue("second_name", resultSet.getString("second_name"));
@@ -34,6 +35,34 @@ public class ClientsModel {
 
     public Posts getClients() {
         return clients;
+    }
+
+    public void updateClients(Post post) throws SQLException {
+        String sql = "UPDATE clients SET last_name = ?, first_name = ?, second_name = ?, inn = ?, address = ?";
+        sql += " WHERE id = ?";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+
+        statement.setString(1, (String) post.getValue("last_name"));
+        statement.setString(2, (String) post.getValue("first_name"));
+        statement.setString(3, (String) post.getValue("second_name"));
+        statement.setString(4, (String) post.getValue("inn"));
+        statement.setString(5, (String) post.getValue("address"));
+        statement.setInt(6, (Integer) post.getValue("id"));
+
+        statement.executeUpdate();
+        statement.close();
+    }
+
+    public void deleteClient(Post post) throws SQLException {
+        String sql = "DELETE FROM clients where id = ?";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1, (Integer) post.getValue("id"));
+
+        statement.executeUpdate();
+        statement.close();
+
     }
 
 /*

@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 
@@ -40,17 +41,21 @@ public class Controller implements Initializable {
     public Button addData;
     public Button updateClient;
     public Button deleteClient;
-    public TableColumn first_name;
-    public TableColumn last_name;
-    public TableColumn second_name;
-    public TableColumn inn;
-    public TableColumn address;
-    public TableView<Post> clientsTable;
+    public TableColumn<Client, String> first_name;
+    public TableColumn<Client, String> last_name;
+    public TableColumn<Client, String> second_name;
+    public TableColumn<Client, String> inn;
+    public TableColumn<Client, String> address;
+    public TableView<Client> clientsTable;
     public TextField enterF;
     public TextField enterI;
     public TextField enterO;
     public TextField enterInn;
     public TextField enterAddress;
+    public TableColumn idClient;
+    public Button updatePost;
+
+    private Post selected;
 
     private Stage stage;
     private Scene scene;
@@ -73,8 +78,13 @@ public class Controller implements Initializable {
         isConnected = false;
         ConnectionTry connectionTry = new ConnectionTry();
         connection = connectionTry.getConnection();
-        clientsTable = new TableView<Post>();
-
+        clientsTable = new TableView<Client>();
+        enterF = new TextField();
+        enterI = new TextField();
+        enterO = new TextField();
+        enterInn = new TextField();
+        enterAddress = new TextField();
+        selected = new Post();
     }
 
 
@@ -216,55 +226,49 @@ public class Controller implements Initializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        ObservableList<Post> temp = FXCollections.observableArrayList();
+        ObservableList<Client> temp = FXCollections.observableArrayList();
         Posts temp_posts = clientsModel.getClients();
-        temp.addAll(temp_posts.getResult());
+        for (Post post:temp_posts.getResult()) {
+            int id = (int)post.getValue("id");
+            String l_name = (String) post.getValue("last_name");
+            String f_name = (String) post.getValue("first_name");
+            String s_name = (String) post.getValue("second_name");
+            String inn = (String) post.getValue("inn");
+            String address = (String) post.getValue("address");
+            temp.add(new Client(id, l_name, f_name, s_name, inn, address));
+        }
+        //temp.addAll(temp_posts.getResult());
 
         clientsTable.getColumns();
 
         /*
-        StringProperty first_name_prop = new SimpleStringProperty((String) temp.get(0).get("first_name"));
-        StringProperty last_name_prop = new SimpleStringProperty((String) temp.get(0).get("last_name"));
-        StringProperty second_name_prop = new SimpleStringProperty((String) temp.get(0).get("second_name"));
-        StringProperty inn_prop = new SimpleStringProperty((String) temp.get(0).get("inn"));
-        StringProperty address_prop = new SimpleStringProperty((String) temp.get(0).get("address"));
+
+        String last_name_prop = (String) temp.get(0).get("last_name");
+        String first_name_prop = (String) temp.get(0).get("first_name");
+        String second_name_prop = (String) temp.get(0).get("second_name");
+        String inn_prop = (String) temp.get(0).get("inn");
+        String address_prop = (String) temp.get(0).get("address");
+        String id_prop = temp.get(0).get("id").toString();
+
+    idClient.setCellValueFactory(data -> new SimpleStringProperty(id_prop));
+        first_name.setCellValueFactory(data -> new SimpleStringProperty(first_name_prop));
+        last_name.setCellValueFactory(data -> new SimpleStringProperty(last_name_prop));
+        second_name.setCellValueFactory(data -> new SimpleStringProperty(second_name_prop));
+        inn.setCellValueFactory(data -> new SimpleStringProperty(inn_prop));
+        address.setCellValueFactory(data -> new SimpleStringProperty(address_prop));
 
          */
 
-
-        SimpleStringProperty first_name_prop = new SimpleStringProperty((String) temp.get(0).get("first_name"));
-        SimpleStringProperty last_name_prop = new SimpleStringProperty((String) temp.get(0).get("last_name"));
-        SimpleStringProperty second_name_prop = new SimpleStringProperty((String) temp.get(0).get("second_name"));
-        SimpleStringProperty inn_prop = new SimpleStringProperty((String) temp.get(0).get("inn"));
-        SimpleStringProperty address_prop = new SimpleStringProperty((String) temp.get(0).get("address"));
-
-        String fname = (String) temp.get(0).get("last_name");
-        String iname = (String) temp.get(0).get("first_name");
-        String sname = (String) temp.get(0).get("second_name");
-        String innname = (String) temp.get(0).get("inn");
-        String addressname = (String) temp.get(0).get("address");
-
-
-        //favoriteBookCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFavoriteBook().getTitle()));
-        first_name.setCellValueFactory(data -> new SimpleStringProperty(iname));
-        last_name.setCellValueFactory(data -> new SimpleStringProperty(fname));
-        second_name.setCellValueFactory(data -> new SimpleStringProperty(sname));
-        inn.setCellValueFactory(data -> new SimpleStringProperty(innname));
-        address.setCellValueFactory(data -> new SimpleStringProperty(addressname));
-        /*
-        first_name.setCellValueFactory(new PropertyValueFactory<String, String>("first_name_prop"));
-        last_name.setCellValueFactory(new PropertyValueFactory<String, String>("last_name_prop"));
-        second_name.setCellValueFactory(new PropertyValueFactory<String, String>("second_name_prop"));
-        inn.setCellValueFactory(new PropertyValueFactory<String, String>("inn_prop"));
-        address.setCellValueFactory(new PropertyValueFactory<String, String>("address_prop"));
-
-         */
-
+        idClient.setCellValueFactory(new PropertyValueFactory<>("id"));
+        first_name.setCellValueFactory(new PropertyValueFactory<>("first_name"));
+        last_name.setCellValueFactory(new PropertyValueFactory<>("last_name"));
+        second_name.setCellValueFactory(new PropertyValueFactory<>("second_name"));
+        inn.setCellValueFactory(new PropertyValueFactory<>("inn"));
+        address.setCellValueFactory(new PropertyValueFactory<>("address"));
 
         clientsTable.setItems(temp);
 
-        //clientsTable.getColumns();
-        //clientsTable.getItems();
+
     }
 
     @Override
@@ -292,5 +296,28 @@ public class Controller implements Initializable {
         stage.setScene(scene);
         stage.show();
         clientsTable.getItems();
+    }
+
+    public void updatePostInClients(ActionEvent event) throws IOException {
+
+
+    }
+
+    public void updateClient(ActionEvent event) throws IOException {
+
+        //selected = clientsTable.getSelectionModel().getSelectedItem();
+        root = FXMLLoader.load(getClass().getResource("update-client-view.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+
+        stage.show();
+
+        enterF.setText((String) selected.getValue("last_name"));
+    }
+
+    public void deleteClient(ActionEvent event) throws Exception {
+        //selected = clientsTable.getSelectionModel().getSelectedItem();
+        clientsModel.deleteClient(selected);
     }
 }
