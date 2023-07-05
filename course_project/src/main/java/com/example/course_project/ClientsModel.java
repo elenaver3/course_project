@@ -35,6 +35,7 @@ public class ClientsModel {
     public Posts getClients() {
         return clients;
     }
+
 /*
     public ObservableList<Client> listAllClients() throws SQLException {
 
