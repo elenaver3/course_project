@@ -10,38 +10,93 @@ import java.util.ArrayList;
 
 public class StaffModel {
 
-    Connection connection;
+    private Connection connection;
 
-    public StaffModel() throws Exception {
-        ConnectionTry connectionTry = new ConnectionTry();
-        connection = connectionTry.getConnection();
+    private Posts staff;
 
-        /*
-        try {
-            Statement statement = connection.createStatement();
-            String query = "SELECT user_role FROM users WHERE user_name='" + userLogin + "' AND user_password='" + userPassword + "'";
-            ResultSet resultSet = statement.executeQuery(query);
+    public StaffModel(Connection connection) throws Exception {
+        this.connection = connection;
 
-            posts = new Posts(resultSet);
+        Statement statement = connection.createStatement();
+        String query = "SELECT * FROM staff";
+        ResultSet resultSet = statement.executeQuery(query);
 
-            if (posts.getResult().size() == 1) {
-                Object temp = posts.getResult().get(0).getValue("user_role");
-                role = (int)temp;
-            }
+        staff = new Posts();
 
-
-            if (resultSet.next()) {
-                role = resultSet.getInt("user_role");
-            }
-
-            connection.close();
+        while (resultSet.next()) {
+            Post post = new Post();
+            post.addValue("id", resultSet.getInt("id"));
+            post.addValue("last_name", resultSet.getString("last_name"));
+            post.addValue("first_name", resultSet.getString("first_name"));
+            post.addValue("second_name", resultSet.getString("second_name"));
+            post.addValue("address", resultSet.getString("address"));
+            post.addValue("phone_number", resultSet.getString("phone_number"));
+            staff.addPost(post);
         }
-        catch (Exception e) {
-            System.out.println(e);
-        }
-        */
+    }
+
+    public Posts getStaff() {
+        return staff;
+    }
+
+    public void updateStaff(Staff staff, String new_last, String new_first, String new_second, String new_address, String new_phone) throws SQLException {
+        String sql = "UPDATE staff SET last_name = ?, first_name = ?, second_name = ?, address = ?, phone_number = ?";
+        sql += " WHERE id = ?";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+
+        if (new_last.isBlank())
+            statement.setString(1, staff.getLast_name());
+        else
+            statement.setString(1, new_last);
+        if (new_first.isBlank())
+            statement.setString(2, staff.getFirst_name());
+        else
+            statement.setString(2, new_first);
+        if (new_second.isBlank())
+            statement.setString(3, staff.getSecond_name());
+        else
+            statement.setString(3, new_second);
+        if (new_address.isBlank())
+            statement.setString(4, staff.getAddress());
+        else
+            statement.setString(4, new_address);
+        if (new_phone.isBlank())
+            statement.setString(5, staff.getPhone_number());
+        else
+            statement.setString(5, new_phone);
 
 
+        statement.setInt(6, staff.getId());
+
+        statement.executeUpdate();
+        statement.close();
+    }
+
+    public void deleteStaff(Staff staff) throws SQLException {
+        String sql = "DELETE FROM staff where id = ?";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1, staff.getId());
+
+        statement.executeUpdate();
+        statement.close();
+
+    }
+
+    public void insertStaff(String first_name, String last_name, String second_name, String address, String phone_number) throws SQLException {
+
+        String sql = "INSERT INTO staff (last_name, first_name, second_name, address, phone_number) VALUES (?, ?, ?, ?, ?)";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, last_name);
+        statement.setString(2, first_name);
+        statement.setString(3, second_name);
+        statement.setString(4, address);
+        statement.setString(5, phone_number);
+
+        statement.executeUpdate();
+        statement.close();
     }
 
 
@@ -50,106 +105,5 @@ public class StaffModel {
             connection.close();
         }
     }
-    /*
 
-    public boolean insertUsers(Book book) throws SQLException {
-        String sql = "INSERT INTO book (title, author, price) VALUES (?, ?, ?)";
-        connect();
-
-        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-        statement.setString(1, book.getTitle());
-        statement.setString(2, book.getAuthor());
-        statement.setFloat(3, book.getPrice());
-
-        boolean rowInserted = statement.executeUpdate() > 0;
-        statement.close();
-        disconnect();
-        return rowInserted;
-    }
-
-    public List<Book> listAllBooks() throws SQLException {
-        List<Book> listBook = new ArrayList<>();
-
-        String sql = "SELECT * FROM book";
-
-        connect();
-
-        Statement statement = jdbcConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
-
-        while (resultSet.next()) {
-            int id = resultSet.getInt("book_id");
-            String title = resultSet.getString("title");
-            String author = resultSet.getString("author");
-            float price = resultSet.getFloat("price");
-
-            Book book = new Book(id, title, author, price);
-            listBook.add(book);
-        }
-
-        resultSet.close();
-        statement.close();
-
-        disconnect();
-
-        return listBook;
-    }
-
-    public boolean deleteBook(Book book) throws SQLException {
-        String sql = "DELETE FROM book where book_id = ?";
-
-        connect();
-
-        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-        statement.setInt(1, book.getId());
-
-        boolean rowDeleted = statement.executeUpdate() > 0;
-        statement.close();
-        disconnect();
-        return rowDeleted;
-    }
-
-    public boolean updateBook(Book book) throws SQLException {
-        String sql = "UPDATE book SET title = ?, author = ?, price = ?";
-        sql += " WHERE book_id = ?";
-        connect();
-
-        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-        statement.setString(1, book.getTitle());
-        statement.setString(2, book.getAuthor());
-        statement.setFloat(3, book.getPrice());
-        statement.setInt(4, book.getId());
-
-        boolean rowUpdated = statement.executeUpdate() > 0;
-        statement.close();
-        disconnect();
-        return rowUpdated;
-    }
-
-    public Book getBook(int id) throws SQLException {
-        Book book = null;
-        String sql = "SELECT * FROM book WHERE book_id = ?";
-
-        connect();
-
-        PreparedStatement statement = jdbcConnection.prepareStatement(sql);
-        statement.setInt(1, id);
-
-        ResultSet resultSet = statement.executeQuery();
-
-        if (resultSet.next()) {
-            String title = resultSet.getString("title");
-            String author = resultSet.getString("author");
-            float price = resultSet.getFloat("price");
-
-            book = new Book(id, title, author, price);
-        }
-
-        resultSet.close();
-        statement.close();
-
-        return book;
-    }
-
-     */
 }

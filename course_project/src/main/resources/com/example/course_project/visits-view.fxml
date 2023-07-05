@@ -2,13 +2,31 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="276.0" prefWidth="298.0" spacing="20.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.course_project.Controller">
+<VBox alignment="CENTER" prefHeight="668.0" prefWidth="896.0" spacing="20.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.course_project.Controller">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
     <children>
+        <TableView fx:id="visitsTable" prefHeight="200.0" prefWidth="200.0">
+
+            <columns>
+                <TableColumn fx:id="idVisit" prefWidth="28.79998779296875" text="id" />
+                <TableColumn fx:id="visitTimeStart" minWidth="0.0" prefWidth="173.59997177124023" text="Начало визита" />
+                <TableColumn fx:id="visitTimeEnd" minWidth="0.0" prefWidth="242.4000701904297" text="Конец визита" />
+                <TableColumn fx:id="visitTable" minWidth="0.0" prefWidth="237.5999755859375" text="Номер стола" />
+                <TableColumn fx:id="visitWaiter" minWidth="0.0" prefWidth="156.79998779296875" text="Официант" />
+            </columns>
+        </TableView>
+        <Button fx:id="addVisitDishes" mnemonicParsing="false" onAction="#addDishesInVisitView" prefHeight="51.0" prefWidth="170.0" text="Блюда за визит" />
+        <Button fx:id="addVisitClients" mnemonicParsing="false" onAction="#addClientsInVisitView" prefHeight="53.0" prefWidth="170.0" text="Посетители за визит" />
+        <Button fx:id="addData" mnemonicParsing="false" onAction="#addVisitView" text="Добавить запись" />
+        <Button fx:id="updateVisit" mnemonicParsing="false" onAction="#updateVisits" text="Обновить запись" />
+        <Button fx:id="deleteVisit" mnemonicParsing="false" onAction="#deleteVisits" text="Удалить запись" />
+        <Button fx:id="updateTableVisit" mnemonicParsing="false" onAction="#onUpdateTableVisit" text="Загрузить данные" />
         <Button fx:id="backBtn" mnemonicParsing="false" onAction="#backToMenu" text="Назад" />
     </children>
 </VBox>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" prefHeight="406.0" prefWidth="905.0" spacing="20.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.course_project.Controller">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <children>
+        <TableView fx:id="staffTable" prefHeight="200.0" prefWidth="200.0">
+            <columns>
+                <TableColumn fx:id="idStaff" prefWidth="28.79998779296875" text="id" />
+                <TableColumn fx:id="first_nameStaff" prefWidth="119.19998550415039" text="Фамилия" />
+                <TableColumn fx:id="last_nameStaff" prefWidth="131.2000732421875" text="Имя" />
+                <TableColumn fx:id="second_nameStaff" prefWidth="166.39996337890625" text="Отчество" />
+                <TableColumn fx:id="phoneNumber" prefWidth="180.79998779296875" text="Номер телефона" />
+                <TableColumn fx:id="addressStaff" prefWidth="231.99993896484375" text="Адрес" />
+            </columns>
+        </TableView>
+        <Button fx:id="addData" mnemonicParsing="false" onAction="#addStaffView" text="Добавить запись" />
+        <Button fx:id="updateStaff" mnemonicParsing="false" onAction="#updateStaff" text="Обновить запись" />
+        <Button fx:id="deleteStaff" mnemonicParsing="false" onAction="#deleteStaff" text="Удалить запись" />
+        <Button fx:id="updateTableStaff" mnemonicParsing="false" onAction="#onUpdateTableStaff" text="Загрузить данные" />
+        <Button fx:id="backBtn" mnemonicParsing="false" onAction="#backToMenu" text="Назад" />
+    </children>
+</VBox>

@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="572.0" prefWidth="616.0" spacing="20.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.course_project.Controller">
+<VBox alignment="CENTER" prefHeight="381.0" prefWidth="616.0" spacing="20.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.course_project.Controller">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -15,10 +15,10 @@
             <columns>
                 <TableColumn fx:id="idDish" prefWidth="28.79998779296875" text="id" />
                 <TableColumn fx:id="dishName" prefWidth="545.6000671386719" text="Название блюда" />
+                <TableColumn fx:id="dishAmount" prefWidth="545.6000671386719" text="Количество" />
             </columns>
         </TableView>
-        <Button fx:id="addDataIngInDish" mnemonicParsing="false" onAction="#addIngredientsInDish" text="Добавить ингредиенты в блюдо" />
-        <Button fx:id="addData" mnemonicParsing="false" onAction="#addDishView" text="Добавить запись" />
+        <Button fx:id="addData" mnemonicParsing="false" onAction="#addDishInVisitView" text="Добавить запись" />
         <Button fx:id="updateDish" mnemonicParsing="false" onAction="#updateDishes" text="Обновить запись" />
         <Button fx:id="deleteDish" mnemonicParsing="false" onAction="#deleteDishes" text="Удалить запись" />
         <Button fx:id="updateTableDish" mnemonicParsing="false" onAction="#onUpdateTableDishes" text="Загрузить данные" />

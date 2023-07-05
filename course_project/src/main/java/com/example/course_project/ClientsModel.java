@@ -37,32 +37,63 @@ public class ClientsModel {
         return clients;
     }
 
-    public void updateClients(Post post) throws SQLException {
+    public void updateClients(Client client, String new_last, String new_first, String new_second, String new_inn, String new_address) throws SQLException {
         String sql = "UPDATE clients SET last_name = ?, first_name = ?, second_name = ?, inn = ?, address = ?";
         sql += " WHERE id = ?";
 
         PreparedStatement statement = connection.prepareStatement(sql);
 
-        statement.setString(1, (String) post.getValue("last_name"));
-        statement.setString(2, (String) post.getValue("first_name"));
-        statement.setString(3, (String) post.getValue("second_name"));
-        statement.setString(4, (String) post.getValue("inn"));
-        statement.setString(5, (String) post.getValue("address"));
-        statement.setInt(6, (Integer) post.getValue("id"));
+        if (new_last.isBlank())
+            statement.setString(1, client.getLast_name());
+        else
+            statement.setString(1, new_last);
+        if (new_first.isBlank())
+            statement.setString(2, client.getFirst_name());
+        else
+            statement.setString(2, new_first);
+        if (new_second.isBlank())
+            statement.setString(3, client.getSecond_name());
+        else
+            statement.setString(3, new_second);
+        if (new_inn.isBlank())
+            statement.setString(4, client.getInn());
+        else
+            statement.setString(4, new_inn);
+        if (new_address.isBlank())
+            statement.setString(5, client.getAddress());
+        else
+            statement.setString(5, new_address);
+
+        statement.setInt(6, client.getId());
 
         statement.executeUpdate();
         statement.close();
     }
 
-    public void deleteClient(Post post) throws SQLException {
+    public void deleteClient(Client client) throws SQLException {
         String sql = "DELETE FROM clients where id = ?";
 
         PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setInt(1, (Integer) post.getValue("id"));
+        statement.setInt(1, client.getId());
 
         statement.executeUpdate();
         statement.close();
 
+    }
+
+    public void insertClient( String first_name, String last_name, String second_name, String inn, String address) throws SQLException {
+
+        String sql = "INSERT INTO clients (last_name, first_name, second_name, inn, address) VALUES (?, ?, ?, ?, ?)";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, last_name);
+        statement.setString(2, first_name);
+        statement.setString(3, second_name);
+        statement.setString(4, inn);
+        statement.setString(5, address);
+
+        statement.executeUpdate() ;
+        statement.close();
     }
 
 /*

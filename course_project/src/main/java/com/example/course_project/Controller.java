@@ -1,8 +1,5 @@
 package com.example.course_project;
 
-
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,9 +16,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -36,7 +31,6 @@ public class Controller implements Initializable {
     public Button dishesBtn;
     public Button ingredientsBtn;
     public Button backBtn;
-    public ListView clientsList;
     public Button updateTableClients;
     public Button addData;
     public Button updateClient;
@@ -52,10 +46,40 @@ public class Controller implements Initializable {
     public TextField enterO;
     public TextField enterInn;
     public TextField enterAddress;
-    public TableColumn idClient;
+    public TableColumn<Client, String> idClient;
     public Button updatePost;
+    public Button addNewPost;
+    public TableView<Dish> dishesTable;
+    public TableView<Staff> staffTable;
 
-    private Post selected;
+    public Button updateStaff;
+    public Button deleteStaff;
+    public Button updateTableStaff;
+    public TextField enterPhone;
+    public TableColumn<Staff, String> idStaff;
+    public TableColumn<Staff, String> addressStaff;
+    public TableColumn<Staff, String> second_nameStaff;
+    public TableColumn<Staff, String> last_nameStaff;
+    public TableColumn<Staff, String> first_nameStaff;
+    public TableColumn<Staff, String> phoneNumber;
+    public TableColumn<Dish, String> dishName;
+    public TableColumn<Dish, String> idDish;
+    public Button addDataIngInDish;
+    public Button updateDish;
+    public Button deleteDish;
+    public Button updateTableDish;
+    public TextField enterNameDish;
+    public TableView tablesTable;
+    public TableColumn idTable;
+    public TableColumn tableNumber;
+    public TableColumn tableMaxPeople;
+    public Button updateTables;
+    public Button deleteTables;
+    public Button updateTableTables;
+
+    private Client selectedClient;
+    private Staff selectedStaff;
+    private Dish selectedDish;
 
     private Stage stage;
     private Scene scene;
@@ -66,10 +90,10 @@ public class Controller implements Initializable {
 
     private Authorization authorization;
     private ClientsModel clientsModel;
+    private StaffModel staffModel;
+    private DishModel dishModel;
     private Connection connection;
 
-    @FXML
-    private Label welcomeText;
     @FXML
     private TextField login;
 
@@ -78,13 +102,35 @@ public class Controller implements Initializable {
         isConnected = false;
         ConnectionTry connectionTry = new ConnectionTry();
         connection = connectionTry.getConnection();
+
         clientsTable = new TableView<Client>();
+        staffTable = new TableView<Staff>();
+        dishesTable = new TableView<Dish>();
+
         enterF = new TextField();
         enterI = new TextField();
         enterO = new TextField();
         enterInn = new TextField();
         enterAddress = new TextField();
-        selected = new Post();
+        selectedClient = new Client();
+        selectedStaff = new Staff();
+        selectedDish = new Dish();
+
+        try {
+            clientsModel = new ClientsModel(connection);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            staffModel = new StaffModel(connection);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            dishModel = new DishModel(connection);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -135,46 +181,10 @@ public class Controller implements Initializable {
 
     public void openClients(ActionEvent event) throws Exception {
 
-        /*
-        clientsModel = new ClientsModel(connection);
-        ObservableList<Post> temp = FXCollections.observableArrayList();
-        Posts temp_posts = clientsModel.getClients();
-        temp.addAll(temp_posts.getResult());
-        clientsTable.setItems(temp);
-        //clientsList.setItems(temp);
-        //clientsList = FXCollections.observableArrayList(clientsModel.getClients());
-
-         */
-
         root = FXMLLoader.load(getClass().getResource("clients-view.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
-/*
-        clientsModel = new ClientsModel(connection);
-        ObservableList<Post> temp = FXCollections.observableArrayList();
-        Posts temp_posts = clientsModel.getClients();
-        temp.addAll(temp_posts.getResult());
-        clientsTable.setItems(temp);
-
-        StringProperty first_name_prop = new SimpleStringProperty();
-        StringProperty last_name_prop = new SimpleStringProperty();
-        StringProperty second_name_prop = new SimpleStringProperty();
-        StringProperty inn_name_prop = new SimpleStringProperty();
-        StringProperty address_name_prop = new SimpleStringProperty();
-
-        first_name_prop.set((String) temp_posts.getResult().get(0).get("first_name"));
-        last_name_prop.set((String) temp_posts.getResult().get(0).get("last_name"));
-        second_name_prop.set((String) temp_posts.getResult().get(0).get("second_name"));
-        inn_name_prop.set((String) temp_posts.getResult().get(0).get("inn"));
-        address_name_prop.set((String) temp_posts.getResult().get(0).get("address"));
-
-        first_name.setCellFactory(new PropertyValueFactory<>("first_name_prop"));
-        last_name.setCellFactory(new PropertyValueFactory<>("last_name"));
-        second_name.setCellFactory(new PropertyValueFactory<>("second_name"));
-        inn.setCellFactory(new PropertyValueFactory<>("inn"));
-        address.setCellFactory(new PropertyValueFactory<>("address"));*/
-
 
         stage.show();
     }
@@ -220,12 +230,6 @@ public class Controller implements Initializable {
     }
 
     public void onUpdateTableClients(ActionEvent event) {
-
-        try {
-            clientsModel = new ClientsModel(connection);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
         ObservableList<Client> temp = FXCollections.observableArrayList();
         Posts temp_posts = clientsModel.getClients();
         for (Post post:temp_posts.getResult()) {
@@ -235,29 +239,10 @@ public class Controller implements Initializable {
             String s_name = (String) post.getValue("second_name");
             String inn = (String) post.getValue("inn");
             String address = (String) post.getValue("address");
-            temp.add(new Client(id, l_name, f_name, s_name, inn, address));
+            temp.add(new Client(id, l_name, f_name, s_name, address, inn));
         }
-        //temp.addAll(temp_posts.getResult());
 
         clientsTable.getColumns();
-
-        /*
-
-        String last_name_prop = (String) temp.get(0).get("last_name");
-        String first_name_prop = (String) temp.get(0).get("first_name");
-        String second_name_prop = (String) temp.get(0).get("second_name");
-        String inn_prop = (String) temp.get(0).get("inn");
-        String address_prop = (String) temp.get(0).get("address");
-        String id_prop = temp.get(0).get("id").toString();
-
-    idClient.setCellValueFactory(data -> new SimpleStringProperty(id_prop));
-        first_name.setCellValueFactory(data -> new SimpleStringProperty(first_name_prop));
-        last_name.setCellValueFactory(data -> new SimpleStringProperty(last_name_prop));
-        second_name.setCellValueFactory(data -> new SimpleStringProperty(second_name_prop));
-        inn.setCellValueFactory(data -> new SimpleStringProperty(inn_prop));
-        address.setCellValueFactory(data -> new SimpleStringProperty(address_prop));
-
-         */
 
         idClient.setCellValueFactory(new PropertyValueFactory<>("id"));
         first_name.setCellValueFactory(new PropertyValueFactory<>("first_name"));
@@ -267,8 +252,6 @@ public class Controller implements Initializable {
         address.setCellValueFactory(new PropertyValueFactory<>("address"));
 
         clientsTable.setItems(temp);
-
-
     }
 
     @Override
@@ -298,14 +281,14 @@ public class Controller implements Initializable {
         clientsTable.getItems();
     }
 
-    public void updatePostInClients(ActionEvent event) throws IOException {
-
-
+    public void updatePostInClients(ActionEvent event) throws Exception {
+        clientsModel.updateClients(selectedClient, enterF.getText(), enterI.getText(), enterO.getText(), enterInn.getText(), enterAddress.getText());
     }
 
     public void updateClient(ActionEvent event) throws IOException {
 
-        //selected = clientsTable.getSelectionModel().getSelectedItem();
+        selectedClient = new Client(clientsTable.getSelectionModel().getSelectedItem().getId(), clientsTable.getSelectionModel().getSelectedItem().getLast_name(), clientsTable.getSelectionModel().getSelectedItem().getFirst_name(), clientsTable.getSelectionModel().getSelectedItem().getSecond_name(), clientsTable.getSelectionModel().getSelectedItem().getInn(), clientsTable.getSelectionModel().getSelectedItem().getAddress());
+
         root = FXMLLoader.load(getClass().getResource("update-client-view.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -313,11 +296,179 @@ public class Controller implements Initializable {
 
         stage.show();
 
-        enterF.setText((String) selected.getValue("last_name"));
     }
 
     public void deleteClient(ActionEvent event) throws Exception {
-        //selected = clientsTable.getSelectionModel().getSelectedItem();
-        clientsModel.deleteClient(selected);
+        selectedClient = clientsTable.getSelectionModel().getSelectedItem();
+        clientsModel.deleteClient(selectedClient);
+    }
+
+    public void addNewClient(ActionEvent event) throws SQLException {
+        clientsModel.insertClient(enterF.getText(), enterI.getText(), enterO.getText(), enterInn.getText(), enterAddress.getText());
+    }
+
+    public void openStaff(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("staff-view.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void addStaffView(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("add-staff-view.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void updateStaff(ActionEvent event) throws IOException {
+        selectedStaff = new Staff(staffTable.getSelectionModel().getSelectedItem().getId(),
+                staffTable.getSelectionModel().getSelectedItem().getLast_name(),
+                staffTable.getSelectionModel().getSelectedItem().getFirst_name(),
+                staffTable.getSelectionModel().getSelectedItem().getSecond_name(),
+                staffTable.getSelectionModel().getSelectedItem().getAddress(),
+                staffTable.getSelectionModel().getSelectedItem().getPhone_number());
+
+        root = FXMLLoader.load(getClass().getResource("update-staff-view.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+    public void deleteStaff(ActionEvent event) throws SQLException {
+        selectedStaff = staffTable.getSelectionModel().getSelectedItem();
+        staffModel.deleteStaff(selectedStaff);
+    }
+
+    public void onUpdateTableStaff(ActionEvent event) {
+        ObservableList<Staff> temp = FXCollections.observableArrayList();
+        Posts temp_posts = staffModel.getStaff();
+        for (Post post:temp_posts.getResult()) {
+            int id = (int)post.getValue("id");
+            String l_name = (String) post.getValue("last_name");
+            String f_name = (String) post.getValue("first_name");
+            String s_name = (String) post.getValue("second_name");
+            String address = (String) post.getValue("address");
+            String phone_number = (String) post.getValue("phone_number");
+            temp.add(new Staff(id, l_name, f_name, s_name, address, phone_number));
+        }
+
+        staffTable.getColumns();
+
+        idStaff.setCellValueFactory(new PropertyValueFactory<>("id"));
+        last_nameStaff.setCellValueFactory(new PropertyValueFactory<>("last_name"));
+        first_nameStaff.setCellValueFactory(new PropertyValueFactory<>("first_name"));
+        second_nameStaff.setCellValueFactory(new PropertyValueFactory<>("second_name"));
+        addressStaff.setCellValueFactory(new PropertyValueFactory<>("address"));
+        phoneNumber.setCellValueFactory(new PropertyValueFactory<>("phone_number"));
+
+        staffTable.setItems(temp);
+    }
+
+    public void addNewStaff(ActionEvent event) throws SQLException {
+        staffModel.insertStaff(enterF.getText(), enterI.getText(), enterO.getText(), enterAddress.getText(), enterPhone.getText());
+    }
+
+    public void backToStaff(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("staff-view.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void updatePostInStaff(ActionEvent event) throws SQLException {
+        staffModel.updateStaff(selectedStaff, enterF.getText(), enterI.getText(), enterO.getText(), enterAddress.getText(), enterPhone.getText());
+    }
+
+    public void addIngredientsInDish(ActionEvent event) {
+    }
+
+    public void addDishView(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("add-dish-view.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void updateDishes(ActionEvent event) throws SQLException, IOException {
+        selectedDish = new Dish(dishesTable.getSelectionModel().getSelectedItem().getId(), dishesTable.getSelectionModel().getSelectedItem().getName());
+
+        root = FXMLLoader.load(getClass().getResource("update-dish-view.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+    public void deleteDishes(ActionEvent event) throws SQLException {
+        selectedDish = dishesTable.getSelectionModel().getSelectedItem();
+        dishModel.deleteDishes(selectedDish);
+    }
+
+    public void onUpdateTableDishes(ActionEvent event) {
+        ObservableList<Dish> temp = FXCollections.observableArrayList();
+        Posts temp_posts = dishModel.getDishes();
+        for (Post post:temp_posts.getResult()) {
+            int id = (int)post.getValue("id");
+            String name = (String) post.getValue("name");
+            temp.add(new Dish(id, name));
+        }
+
+        idDish.setCellValueFactory(new PropertyValueFactory<>("id"));
+        dishName.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        dishesTable.setItems(temp);
+    }
+
+    public void updatePostInDishes(ActionEvent event) throws SQLException {
+        dishModel.updateDishes(selectedDish, enterNameDish.getText());
+    }
+
+    public void backToDish(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("dishes-view.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+    public void addNewDish(ActionEvent event) throws SQLException {
+        dishModel.insertDish(enterNameDish.getText());
+
+    }
+
+    public void addTablesView(ActionEvent event) {
+    }
+
+    public void updateTables(ActionEvent event) {
+    }
+
+    public void deleteTables(ActionEvent event) {
+    }
+
+    public void onUpdateTableTables(ActionEvent event) {
+    }
+
+    public void addNewTable(ActionEvent event) {
+    }
+
+    public void backToTable(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("tables-view.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+    public void updatePostInTable(ActionEvent event) {
     }
 }

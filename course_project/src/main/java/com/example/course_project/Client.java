@@ -7,6 +7,9 @@ public class Client extends Human  {
     private SimpleStringProperty inn;
     private SimpleStringProperty id;
 
+    public Client() {
+
+    }
     public Client(int id, String last_name, String first_name, String second_name, String address, String inn) {
         this.inn = new SimpleStringProperty();
         this.id = new SimpleStringProperty();
