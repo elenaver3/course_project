@@ -1,9 +1,12 @@
 package com.example.course_project;
 
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,11 +14,13 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ResourceBundle;
 
-public class Controller {
+public class Controller implements Initializable {
     public TextField userLogin;
     public PasswordField userPassword;
     public Button exitBtn;
@@ -28,15 +33,17 @@ public class Controller {
     public Button ingredientsBtn;
     public Button backBtn;
     public ListView clientsList;
+    public Button updateTableClients;
 
     private Stage stage;
     private Scene scene;
     private Parent root;
 
-    private boolean isConnected;
+    private boolean isConnected = false;
     private int role;
 
     private Authorization authorization;
+    private ClientsModel clientsModel;
     private Connection connection;
 
     @FXML
@@ -45,14 +52,18 @@ public class Controller {
     private TextField login;
 
 
-    public Controller() {
+    public Controller() throws Exception {
         isConnected = false;
+        ConnectionTry connectionTry = new ConnectionTry();
+        connection = connectionTry.getConnection();
+        clientsList = new ListView<>();
     }
+
+
 
     @FXML
     protected void login(ActionEvent event) throws Exception {
-        ConnectionTry connectionTry = new ConnectionTry();
-        connection = connectionTry.getConnection();
+
         authorization = new Authorization(connection, userLogin.getText(), userPassword.getText());
         role = authorization.getRole();
 
@@ -94,12 +105,21 @@ public class Controller {
         stage.show();
     }
 
-    public void openClients(ActionEvent event) throws IOException {
+    public void openClients(ActionEvent event) throws Exception {
+
+        clientsModel = new ClientsModel(connection);
+        ObservableList<Post> temp = FXCollections.observableArrayList();
+        Posts temp_posts = clientsModel.getClients();
+        temp.addAll(temp_posts.getResult());
+        clientsList.setItems(temp);
+        clientsList = FXCollections.observableArrayList(clientsModel.getClients());
+
         root = FXMLLoader.load(getClass().getResource("clients-view.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+        clientsList.getItems();
     }
 
     public void openVisits(ActionEvent event) throws IOException {
@@ -140,5 +160,17 @@ public class Controller {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void onUpdateTableClients(ActionEvent event) {
+        clientsList.getItems();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        /*
+
+
+         */
     }
 }

@@ -1,49 +1,74 @@
 package com.example.course_project;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
+
 import java.sql.*;
 import java.util.ArrayList;
 
 public class ClientsModel {
-    Connection connection;
+    private Posts clients;
+    private Connection connection;
 
-    public ClientsModel() throws Exception {
-        ConnectionTry connectionTry = new ConnectionTry();
-        connection = connectionTry.getConnection();
+    public ClientsModel(Connection connection) throws Exception {
+        this.connection = connection;
 
-        /*
-        try {
-            Statement statement = connection.createStatement();
-            String query = "SELECT user_role FROM users WHERE user_name='" + userLogin + "' AND user_password='" + userPassword + "'";
-            ResultSet resultSet = statement.executeQuery(query);
+        Statement statement = connection.createStatement();
+        String query = "SELECT * FROM clients";
+        ResultSet resultSet = statement.executeQuery(query);
 
-            posts = new Posts(resultSet);
+        clients = new Posts();
 
-            if (posts.getResult().size() == 1) {
-                Object temp = posts.getResult().get(0).getValue("user_role");
-                role = (int)temp;
-            }
-
-
-            if (resultSet.next()) {
-                role = resultSet.getInt("user_role");
-            }
-
-            connection.close();
+        if (resultSet.next()) {
+            Post post = new Post();
+            post.addValue("last_name", resultSet.getString("last_name"));
+            post.addValue("first_name", resultSet.getString("first_name"));
+            post.addValue("second_name", resultSet.getString("second_name"));
+            post.addValue("inn", resultSet.getString("inn"));
+            post.addValue("address", resultSet.getString("address"));
+            clients.addPost(post);
         }
-        catch (Exception e) {
-            System.out.println(e);
-        }
-        */
-
 
     }
 
+    public Posts getClients() {
+        return clients;
+    }
+/*
+    public ObservableList<Client> listAllClients() throws SQLException {
 
+        String sql = "SELECT * FROM book";
+
+        connect();
+
+        Statement statement = jdbcConnection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        while (resultSet.next()) {
+            int id = resultSet.getInt("book_id");
+            String title = resultSet.getString("title");
+            String author = resultSet.getString("author");
+            float price = resultSet.getFloat("price");
+
+            Book book = new Book(id, title, author, price);
+            listBook.add(book);
+        }
+
+        resultSet.close();
+        statement.close();
+
+        disconnect();
+
+        return listBook;
+    }
+
+    /*
     protected void disconnect() throws SQLException {
         if (connection != null && !connection.isClosed()) {
             connection.close();
         }
-    }
+    }*/
 
     /*
     public boolean insertUsers() throws SQLException {

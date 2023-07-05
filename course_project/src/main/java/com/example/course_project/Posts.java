@@ -1,5 +1,9 @@
 package com.example.course_project;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
@@ -7,16 +11,17 @@ import java.util.ArrayList;
 
 public class Posts {
 
-    private ArrayList<Post> result;
+    private ObservableList<Post> result;
 
 
     public Posts() throws Exception {
-        result = new ArrayList<>();
+        //result = new ArrayList<>();
+        result = FXCollections.observableArrayList();
 
         //loadResult(resultSet);
     }
 
-    public ArrayList<Post> getResult() {
+    public ObservableList<Post> getResult() {
         return result;
     }
 
