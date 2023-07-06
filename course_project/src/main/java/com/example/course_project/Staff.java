@@ -22,7 +22,7 @@ public class Staff extends Human {
     }
 
     public int getId() {
-        return Integer.parseInt(id.get());
+        return Integer.parseInt(id.getValue());
     }
 
     public void setId(int id) {
@@ -31,7 +31,7 @@ public class Staff extends Human {
 
 
     public String getPhone_number() {
-        return phone_number.get();
+        return phone_number.getValue();
     }
 
     public void setPhone_number(String phone) {

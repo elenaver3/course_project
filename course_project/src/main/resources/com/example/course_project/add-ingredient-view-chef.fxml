@@ -15,11 +15,9 @@
       <TextField fx:id="enterIngName" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="182.0" />
       <Label layoutX="134.0" layoutY="30.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Единица измерения" />
       <TextField fx:id="enterIngMU" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="182.0" />
-      <Label layoutX="104.0" layoutY="114.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Количество" />
-      <TextField fx:id="enterIngAmount" layoutX="68.0" layoutY="152.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="182.0" />
 
         <Button fx:id="addNewPost" mnemonicParsing="false" onAction="#addNewIng" text="Добавить запись" />
 
-        <Button fx:id="backBtn" mnemonicParsing="false" onAction="#backToIng" text="Назад" />
+        <Button fx:id="backBtnChef" mnemonicParsing="false" onAction="#backToIngChef" text="Назад" />
     </children>
 </VBox>

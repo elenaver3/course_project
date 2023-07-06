@@ -49,6 +49,8 @@ public class ClientController implements Initializable {
 
     // Table view
     public TableView<Client> clientsTable;
+    public Button addNewPost;
+    public Button updatePost;
 
     //selected
     private int selectedClient;
@@ -171,4 +173,39 @@ public class ClientController implements Initializable {
         clientsModel.insertClient(enterF.getText(), enterI.getText(), enterO.getText(), enterInn.getText(), enterAddress.getText());
     }
 
+    public void backToMenuWaiter(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("client-view-waiter.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+    public void updateClientWaiter(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("update-client-view-waiter.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+    public void addClientViewWaiter(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("add-client-view-waiter.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
+    public void backToClientWaiter(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("client-view-waiter.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+
+        stage.show();
+    }
 }

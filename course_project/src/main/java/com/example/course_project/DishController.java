@@ -48,6 +48,7 @@ public class DishController implements Initializable {
     public TableView<Dish> dishesTable;
     public TableView<Staff> staffTable;
     public TableView<Table> tablesTable;
+    public Button backBtnChef;
 
 
     //selected
@@ -157,5 +158,53 @@ public class DishController implements Initializable {
 
     public void addNewDish(ActionEvent event) throws SQLException {
         dishModel.insertDish(enterNameDish.getText());
+    }
+
+    public void backToMenuGuest(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("guest-view.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void backToDishChef(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("dishes-view-chef.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void backToMenuChef(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("chef-view.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void addDishViewChef(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("add-dish-view-chef.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void updateDishesChef(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("update-dish-view-chef.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void backToMenuWaiter(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("waiter-view-waiter.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 }

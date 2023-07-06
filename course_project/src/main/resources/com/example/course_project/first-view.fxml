@@ -7,16 +7,16 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="299.0" prefWidth="298.0" spacing="20.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.course_project.Controller">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="358.0" prefWidth="413.0" spacing="20.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.course_project.Controller">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-   <Label prefHeight="18.0" prefWidth="293.0" text="Логин" />
-
-
+   <Label />
+   <Label prefHeight="18.0" prefWidth="376.0" text="Логин" />
     <TextField fx:id="userLogin" prefHeight="14.0" prefWidth="191.0" />
-   <Label prefHeight="18.0" prefWidth="382.0" text="Пароль" />
+   <Label prefHeight="18.0" prefWidth="374.0" text="Пароль" />
    <PasswordField fx:id="userPassword" />
     <Button onAction="#login" text="Войти" />
+   <Button fx:id="registerBtn" mnemonicParsing="false" onAction="#registrationBegin" prefHeight="26.0" prefWidth="130.0" text="Регистрация" />
    <Label fx:id="rightEnter" />
 </VBox>

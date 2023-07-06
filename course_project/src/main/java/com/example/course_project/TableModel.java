@@ -19,7 +19,7 @@ public class TableModel {
             Post post = new Post();
             post.addValue("id", resultSet.getInt("id"));
             post.addValue("table_number", resultSet.getString("table_number"));
-            post.addValue("max_people", resultSet.getString("max_people"));
+            post.addValue("max_people", resultSet.getInt("max_people"));
             tables.addPost(post);
         }
 
@@ -38,7 +38,7 @@ public class TableModel {
         if (resultSet.next()) {
             table = new Table(resultSet.getInt("id"),
                     resultSet.getString("table_number"),
-                    resultSet.getString("max_people");
+                    resultSet.getInt("max_people"));
         }
         statement.close();
         return table;
@@ -59,7 +59,7 @@ public class TableModel {
             //statement.setString(2, String.valueOf(table.getMaxPeople()));
             statement.setString(2, " ");
         else
-            statement.setString(2, new_max_people);
+            statement.setInt(2, Integer.parseInt(new_max_people));
 
 
         statement.setInt(3, id_table);

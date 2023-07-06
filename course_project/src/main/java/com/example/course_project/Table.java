@@ -21,7 +21,7 @@ public class Table {
     }
 
     public int getId() {
-        return Integer.parseInt(id.get());
+        return Integer.parseInt(id.getValue());
     }
 
     public void setId(int id) {
@@ -30,7 +30,7 @@ public class Table {
 
 
     public String getTableNumber() {
-        return table_number.get();
+        return table_number.getValue();
     }
 
     public void setTableNumber(String name) {
@@ -38,7 +38,7 @@ public class Table {
     }
 
     public int getMaxPeople() {
-        return Integer.parseInt(max_people.get());
+        return Integer.parseInt(max_people.getValue());
     }
 
     public void setMaxPeople(int max_people) {

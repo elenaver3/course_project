@@ -154,4 +154,20 @@ public class TableController implements Initializable {
     public void updatePostInTable(ActionEvent event) throws SQLException {
         tableModel.updateTables(selectedTable, enterTableNumber.getText(), enterMaxPeople.getText());
     }
+
+    public void backToMenuGuest(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("guest-view.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void backToMenuWaiter(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("waiter-view.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 }

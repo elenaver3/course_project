@@ -21,12 +21,12 @@
                 <TableColumn fx:id="visitWaiter" minWidth="0.0" prefWidth="156.79998779296875" text="Официант" />
             </columns>
         </TableView>
-        <Button fx:id="addVisitDishes" mnemonicParsing="false" onAction="#addDishesInVisitView" prefHeight="51.0" prefWidth="170.0" text="Блюда за визит" />
-        <Button fx:id="addVisitClients" mnemonicParsing="false" onAction="#addClientsInVisitView" prefHeight="53.0" prefWidth="170.0" text="Посетители за визит" />
-        <Button fx:id="addData" mnemonicParsing="false" onAction="#addVisitView" text="Добавить запись" />
-        <Button fx:id="updateVisit" mnemonicParsing="false" onAction="#updateVisits" text="Обновить запись" />
+        <Button fx:id="addVisitDishes" mnemonicParsing="false" onAction="#addDishesInVisitViewWaiter" prefHeight="51.0" prefWidth="170.0" text="Блюда за визит" />
+        <Button fx:id="addVisitClients" mnemonicParsing="false" onAction="#addClientsInVisitViewWaiter" prefHeight="53.0" prefWidth="170.0" text="Посетители за визит" />
+        <Button fx:id="addData" mnemonicParsing="false" onAction="#addVisitViewWaiter" text="Добавить запись" />
+        <Button fx:id="updateVisit" mnemonicParsing="false" onAction="#updateVisitsWaiter" text="Обновить запись" />
         <Button fx:id="deleteVisit" mnemonicParsing="false" onAction="#deleteVisits" text="Удалить запись" />
         <Button fx:id="updateTableVisit" mnemonicParsing="false" onAction="#onUpdateTableVisit" text="Загрузить данные" />
-        <Button fx:id="backBtn" mnemonicParsing="false" onAction="#backToMenu" text="Назад" />
+        <Button fx:id="backBtn" mnemonicParsing="false" onAction="#backToMenuWaiter" text="Назад" />
     </children>
 </VBox>
