@@ -23,11 +23,11 @@ public class Client extends Human  {
 
 
     public String getInn() {
-        return inn.get();
+        return inn.getValue();
     }
 
     public int getId() {
-        return Integer.parseInt(id.get());
+        return Integer.parseInt(id.getValue());
     }
 
     public void setId(int id) {

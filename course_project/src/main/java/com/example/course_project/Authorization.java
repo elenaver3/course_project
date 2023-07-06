@@ -5,10 +5,16 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.Base64;
 
 
 public class Authorization {
@@ -26,10 +32,12 @@ public class Authorization {
 
         try {
             Statement statement = connection.createStatement();
-            String query = "SELECT user_role FROM users WHERE user_name='" + userLogin + "' AND user_password='" + userPassword + "'";
+            String[] temp1 = userLogin.split(";");
+
+            String query = "SELECT user_role FROM users WHERE user_name='" + temp1[0] + "' AND user_password='"
+                    + this.getPassword(userPassword) + "'";
             ResultSet resultSet = statement.executeQuery(query);
 
-            //posts = new Posts(resultSet);
             posts = new Posts();
 
             if (resultSet.next()) {
@@ -63,4 +71,9 @@ public class Authorization {
         return role;
     }
 
+    private String getPassword(String password) throws Exception {
+        MessageDigest md = MessageDigest.getInstance("SHA-512");
+        byte[] hashedPassword = md.digest(password.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(hashedPassword);
+    }
 }

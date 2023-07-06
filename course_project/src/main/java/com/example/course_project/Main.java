@@ -14,7 +14,7 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("first-view.fxml"));
         //fxmlLoader.setController(controller);
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Вход");
+        stage.setTitle("Ресторан");
         stage.setScene(scene);
         stage.show();
     }

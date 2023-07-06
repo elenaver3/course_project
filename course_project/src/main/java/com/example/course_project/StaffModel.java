@@ -39,45 +39,69 @@ public class StaffModel {
         return staff;
     }
 
-    public void updateStaff(Staff staff, String new_last, String new_first, String new_second, String new_address, String new_phone) throws SQLException {
+    public Staff getStaffMember(int id_staff) throws SQLException {
+        Staff staff = new Staff();
+        String sql = "SELECT * FROM staff WHERE id=?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1, id_staff);
+        ResultSet resultSet = statement.executeQuery(sql);
+        if (resultSet.next()) {
+            staff = new Staff(resultSet.getInt("id"),
+                    resultSet.getString("last_name"),
+                    resultSet.getString("first_name"),
+                    resultSet.getString("second_name"),
+                    resultSet.getString("address"),
+                    resultSet.getString("phone_number"));
+        }
+
+        statement.close();
+        return staff;
+    }
+
+    public void updateStaff(int staff_id, String new_last, String new_first, String new_second, String new_address, String new_phone) throws SQLException {
         String sql = "UPDATE staff SET last_name = ?, first_name = ?, second_name = ?, address = ?, phone_number = ?";
         sql += " WHERE id = ?";
 
         PreparedStatement statement = connection.prepareStatement(sql);
 
         if (new_last.isBlank())
-            statement.setString(1, staff.getLast_name());
+            //statement.setString(1, staff.getLast_name());
+            statement.setString(1, " ");
         else
             statement.setString(1, new_last);
         if (new_first.isBlank())
-            statement.setString(2, staff.getFirst_name());
+            //statement.setString(2, staff.getFirst_name());
+            statement.setString(2, " ");
         else
             statement.setString(2, new_first);
         if (new_second.isBlank())
-            statement.setString(3, staff.getSecond_name());
+            //statement.setString(3, staff.getSecond_name());
+            statement.setString(3, " ");
         else
             statement.setString(3, new_second);
         if (new_address.isBlank())
-            statement.setString(4, staff.getAddress());
+            //statement.setString(4, staff.getAddress());
+            statement.setString(4, " ");
         else
             statement.setString(4, new_address);
         if (new_phone.isBlank())
-            statement.setString(5, staff.getPhone_number());
+            //statement.setString(5, staff.getPhone_number());
+            statement.setString(5, " ");
         else
             statement.setString(5, new_phone);
 
 
-        statement.setInt(6, staff.getId());
+        statement.setInt(6, staff_id);
 
         statement.executeUpdate();
         statement.close();
     }
 
-    public void deleteStaff(Staff staff) throws SQLException {
+    public void deleteStaff(int staff_id) throws SQLException {
         String sql = "DELETE FROM staff where id = ?";
 
         PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setInt(1, staff.getId());
+        statement.setInt(1, staff_id);
 
         statement.executeUpdate();
         statement.close();
